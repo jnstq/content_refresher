@@ -1,6 +1,8 @@
 class PostsController < ApplicationController  
   include Equipe::ContentRefresher
   refresh :show, :every => 5.seconds
+  skip_before_filter :verify_authenticity_token, :only => [:changed, :show]
+  session :off, :only => [:changed, :show]
   
   def publish_options_for_refresher
     @post = Post.find(params[:id])
