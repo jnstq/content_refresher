@@ -5,6 +5,8 @@ ContentRefresher will request the last updated time for the model at a given int
 
 The plugin defines a changed method, that returns
 	{:id => @model.id, :updated_at => @model.updated_at}
+	
+The client side will compare this with the their last updated_at.
 
 Installation
 ============
@@ -24,6 +26,10 @@ Controller
 class PostsController < ApplicationController  
   include Equipe::ContentRefresher
   refresh :show, :every => 5.seconds
+  
+  # Turn off verify_authenticity_token and session to improve performance
+  skip_before_filter :verify_authenticity_token, :only => [:changed, :show]
+  session :off, :only => [:changed, :show]
 
   def show
     @post = Post.find(params[:id])
@@ -44,3 +50,27 @@ page.visual_effect :highlight, dom_id(@post)
 Routes
 ------
 map.resources :posts, :member => {:changed => :get}
+
+LICENSE
+=======
+
+Copyright (c) 2008 Jon Stenqvist (jon dot stenqvist at gmail)
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

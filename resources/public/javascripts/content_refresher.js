@@ -13,10 +13,10 @@ function checkContentRefresher() {
            new Ajax.Request(checkContentRefresherOptions.refresh_path, {method:'get', asynchronous:true, evalScripts:true});
   			 }
   			 checkContentRefresherOptions.updated_at = json.updated_at;
-  			 $(checkContentRefresherOptions.element_error_id).hide();
+  			 $(checkContentRefresherOptions.error_tag_id).hide();
   	   },
        onFailure: function(transport){
-         $(checkContentRefresherOptions.element_error_id).show();
+         $(checkContentRefresherOptions.error_tag_id).show();
        }
   	});
   	updateInProgress = false
