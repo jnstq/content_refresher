@@ -44,11 +44,16 @@ end
 View
 ----
 
+Create file posts/show.js.rjs, and add
+
 page.replace_html dom_id(@post), :partial => 'post'
 page.visual_effect :highlight, dom_id(@post)
 
 Routes
 ------
+
+Remember to add changed route to each controller you are using the plugin.
+
 map.resources :posts, :member => {:changed => :get}
 
 LICENSE
