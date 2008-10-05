@@ -1,0 +1,8 @@
+Autotest.add_hook :initialize do |at|
+  at.extra_files << "../lib"
+  Dir["../lib/**/*.rb"].each do |plugin_file|
+    at.add_mapping(%r(#{Regexp.quote(plugin_file)})) do |f, _|
+      at.files_matching(/^spec.*rb$/)
+    end
+  end
+end

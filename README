@@ -1,0 +1,46 @@
+ContentRefresher
+================
+
+ContentRefresher will request the last updated time for the model at a given interval. The id and updated_at will be sent to the client in json format. If the the last time has changes the client side ask for new content. All request is done with xhr.
+
+The plugin defines a changed method, that returns
+	{:id => @model.id, :updated_at => @model.updated_at}
+
+Installation
+============
+
+./script/plugin install git://github.com/jnstq/content_refresher.git
+
+This is will also copy the content_refresher.js to public/javascripts/content_refresher.js
+
+Example
+=======
+
+In your controller include the content_refresher module and enable refreshing on one or more actions
+
+Controller
+----------
+
+class PostsController < ApplicationController  
+  include Equipe::ContentRefresher
+  refresh :show, :every => 5.seconds
+
+  def show
+    @post = Post.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.js   # This is the action generate javascript to controll the update on the client side.
+    end
+  end
+end
+
+View
+----
+
+page.replace_html dom_id(@post), :partial => 'post'
+page.visual_effect :highlight, dom_id(@post)
+
+Routes
+------
+map.resources :posts, :member => {:changed => :get}

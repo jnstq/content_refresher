@@ -1,0 +1,2 @@
+page.replace_html dom_id(@post), :partial => 'post'
+page.visual_effect :highlight, dom_id(@post)
