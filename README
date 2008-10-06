@@ -24,12 +24,19 @@ Controller
 ----------
 
 class PostsController < ApplicationController  
-  include Equipe::ContentRefresher
+  include Equipe::ContentRefresher  
+  # This will default check changed
   refresh :show, :every => 5.seconds
+  # You can also dynamic set :pull_path => lambda { changed_post_path(@post) }, :refresh_path => lambda { post_path(@post) }
+  # This will eval the block the in the instance of the controller
+  # refresh :show, :every => 5.seconds, :pull_path => lambda { formatted_changed_post_path(@post, :js) }, :refresh_path => lambda { formatted_post_path(@post, :js) }
+  
   
   # Turn off verify_authenticity_token and session to improve performance
   skip_before_filter :verify_authenticity_token, :only => [:changed, :show]
   session :off, :only => [:changed, :show]
+  # This can be useful, to turn off layout on xhr-request 
+  # layout proc{ |c| c.request.xhr? ? false : "list" }
   
   # This method is defined by including Equipe::ContentRefresher
   # If you want a different behavior please override
@@ -53,6 +60,10 @@ end
 View
 ----
 
+In posts/show.html.erb or in application.html.erb make sure you include the javascripts on the top of the page.
+<%= javascript_include_tag :defaults,  'content_refresher' %>
+
+
 Create file posts/show.js.rjs, and add
 
 page.replace_html dom_id(@post), :partial => 'post'
@@ -65,26 +76,6 @@ Remember to add changed route to each controller you are using the plugin.
 
 map.resources :posts, :member => {:changed => :get}
 
-LICENSE
-=======
-
 Copyright (c) 2008 Jon Stenqvist (jon dot stenqvist at gmail)
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

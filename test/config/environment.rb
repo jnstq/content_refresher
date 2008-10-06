@@ -4,9 +4,9 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
   config.load_paths += ['../lib']
-  config.plugin_paths += ["#{Rails.root}/.."]
+  # config.plugin_paths += ["#{Rails.root}/.."]
   config.time_zone = 'UTC'
-  config.reload_plugins = true
+  # config.reload_plugins = true
   config.gem 'rspec-rails', :lib => 'spec'
   config.action_controller.session = {
     :session_key => '_test_session',

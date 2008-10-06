@@ -27,11 +27,20 @@ module Equipe
       def options_for_refresher(name = action_name)
         key = name.to_sym
         options = self.class.read_inheritable_attribute(:content_refresher)
-        options = options.find{|opt| opt.has_key?(key) } if options        
-        default_options_for_refresher(key).merge(options[key]) if options
+        options = options.find{|opt| opt.has_key?(key) } if options
+        options = options[key]  if options
+        options = default_options_for_refresher(key).merge(options) if options
+        options.inject({}) do |r, (k, v)|
+          if v.respond_to?(:call)
+            r[k] = instance_eval(&v)
+          else
+            r[k] = v
+          end
+          r
+        end if options
       end
 
-      def default_options_for_refresher(action_name)
+      def default_options_for_refresher(action_name)        
         {
           :id => model_object_variable.id,
           :updated_at => model_object_variable.updated_at,
