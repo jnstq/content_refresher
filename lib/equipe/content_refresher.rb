@@ -58,7 +58,7 @@ module Equipe
       end
       
       def model_class
-        "#{controller_name.singularize.capitalize}".constantize
+        "#{controller_name.singularize.classify}".constantize
       end
       
       protected
