@@ -30,6 +30,15 @@ class PostsController < ApplicationController
   # Turn off verify_authenticity_token and session to improve performance
   skip_before_filter :verify_authenticity_token, :only => [:changed, :show]
   session :off, :only => [:changed, :show]
+  
+  # This method is defined by including Equipe::ContentRefresher
+  # If you want a different behavior please override
+  # def changed
+  #   @post = Post.find(params[:id], :select => 'id, updated_at')
+  #   respond_to do |format|
+  #     format.js { render :json => {:id => @post.id, :updated_at => @post.updated_at } }
+  #   end
+  # end
 
   def show
     @post = Post.find(params[:id])
