@@ -46,6 +46,7 @@ module Equipe
           :updated_at => model_object_variable.updated_at,
           :pull_path => url_for(:action => 'changed', :id => model_object_variable.id, :format => 'js'),
           :refresh_path => url_for(:action => action_name, :id => model_object_variable.id, :format => 'js'),
+          :check => true,
         }
       end
       
@@ -70,7 +71,7 @@ module Equipe
             <script type="text/javascript">
             //<![CDATA[
               var checkContentRefresherOptions = #{options.to_json};
-              checkContentRefresher();
+              #{options[:check] ? 'checkContentLoop' : 'reloadContentLoop'}();
             //]]>
             </script>
           </body>})
