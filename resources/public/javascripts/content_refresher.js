@@ -34,5 +34,5 @@ function reloadContent(){
 
 function reloadContentLoop(){
 	reloadContent();
-	setTimeout("reloadContent();", checkContentRefresherOptions.every);		
+	setTimeout("reloadContentLoop();", checkContentRefresherOptions.every);		
 }
