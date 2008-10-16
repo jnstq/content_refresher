@@ -13,7 +13,8 @@ function checkContentLoop(){
 
 function checkContentRefresher() {
  	new Ajax.Request(checkContentRefresherOptions.pull_path, {
- 	  method:'get',  	  
+ 	  method:'get',
+ 	  parameters: {differentiator: encodeURIComponent(Date())},
  	  onSuccess: function(transport){
  	     var json = transport.responseText.evalJSON();
  	     if(json.updated_at != checkContentRefresherOptions.updated_at){
@@ -29,7 +30,7 @@ function checkContentRefresher() {
 }
 
 function reloadContent(){
-  new Ajax.Request(checkContentRefresherOptions.refresh_path, {method:'get', asynchronous:true, evalScripts:true});  
+  new Ajax.Request(checkContentRefresherOptions.refresh_path, {method:'get', asynchronous:true, evalScripts:true,  parameters:{differentiator: encodeURIComponent(Date())}});
 }
 
 function reloadContentLoop(){
